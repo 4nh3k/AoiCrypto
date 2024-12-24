@@ -24,12 +24,16 @@ jobs:
       - name: Install dependencies
         working-directory: ./Frontend
         run: npm ci
-      - name: Build on EAS
-        working-directory: ./Frontend
-        run: eas build --profile ci --platform android --non-interactive --wait
+      # - name: Build on EAS
+      #   working-directory: ./Frontend
+      #   run: eas build --profile ci --platform android --non-interactive --wait
       - name: Download build artifact
         run: |
-          BUILD_URL=$(eas build:list --platform android --status completed --limit 1 --json | jq -r '.[0].artifacts.buildUrl')
+          BUILD_URL=$(eas build:list --platform android --status finished --limit 1 --json --non-interactive | jq -r '.[0].artifacts.buildUrl')
+          if [ -z "$BUILD_URL" ]; then
+            echo "No finished builds found. Exiting."
+            exit 1
+          fi
           curl -o app.apk "$BUILD_URL"
       - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v1
