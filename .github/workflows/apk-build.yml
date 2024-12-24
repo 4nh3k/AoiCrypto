@@ -30,15 +30,9 @@ jobs:
         working-directory: ./Frontend
         run: npm ci
 
-      # Uncomment and modify this step to trigger the actual build if needed
-      # - name: Build on EAS
-      #   working-directory: ./Frontend
-      #   run: eas build --profile ci --platform android --non-interactive --wait
-
-      - name: Debug output of eas build list
+      - name: Build on EAS
         working-directory: ./Frontend
-        run: |
-          eas build:list --platform android --status finished --limit 1 --json --non-interactive
+        run: eas build --profile ci --platform android --non-interactive --wait
 
       - name: Download build artifact
         working-directory: ./Frontend
