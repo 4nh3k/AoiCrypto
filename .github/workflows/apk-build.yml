@@ -36,10 +36,12 @@ jobs:
       #   run: eas build --profile ci --platform android --non-interactive --wait
 
       - name: Debug output of eas build list
+        working-directory: ./Frontend
         run: |
           eas build:list --platform android --status finished --limit 1 --json --non-interactive
 
       - name: Download build artifact
+        working-directory: ./Frontend
         run: |
           BUILD_URL=$(eas build:list --platform android --status finished --limit 1 --json --non-interactive | jq -r '.[0].artifacts.buildUrl')
           if [ -z "$BUILD_URL" ]; then
