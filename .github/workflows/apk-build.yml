@@ -51,6 +51,7 @@ jobs:
           curl -o app.apk "$BUILD_URL"
 
       - name: Create or Update GitHub Release
+        working-directory: ./Frontend
         uses: softprops/action-gh-release@v1
         with:
           files: app.apk
