@@ -1,10 +1,12 @@
 name: EAS Build
+
 on:
   workflow_dispatch:
     inputs:
       release_tag:
         description: "Release tag to attach the .apk file"
         required: true
+
 jobs:
   build:
     name: Install, Build, and Upload
@@ -12,21 +14,31 @@ jobs:
     environment: AoiCrypto
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-node@v4
         with:
           node-version: 18.x
           cache: npm
+
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           token: ${{ vars.EXPO_TOKEN }}
+      
       - name: Install dependencies
         working-directory: ./Frontend
         run: npm ci
+
+      # Uncomment and modify this step to trigger the actual build if needed
       # - name: Build on EAS
       #   working-directory: ./Frontend
       #   run: eas build --profile ci --platform android --non-interactive --wait
+
+      - name: Debug output of eas build list
+        run: |
+          eas build:list --platform android --status finished --limit 1 --json --non-interactive
+
       - name: Download build artifact
         run: |
           BUILD_URL=$(eas build:list --platform android --status finished --limit 1 --json --non-interactive | jq -r '.[0].artifacts.buildUrl')
@@ -35,6 +47,7 @@ jobs:
             exit 1
           fi
           curl -o app.apk "$BUILD_URL"
+
       - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v1
         with:
