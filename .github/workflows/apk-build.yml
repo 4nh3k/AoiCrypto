@@ -25,14 +25,6 @@ jobs:
         with:
           eas-version: latest
           token: ${{ vars.EXPO_TOKEN }}
-      
-      - name: Install dependencies
-        working-directory: ./Frontend
-        run: npm ci
-
-      - name: Build on EAS
-        working-directory: ./Frontend
-        run: eas build --profile ci --platform android --non-interactive --wait
 
       - name: Download build artifact
         working-directory: ./Frontend
