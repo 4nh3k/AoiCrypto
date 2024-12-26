@@ -39,7 +39,7 @@ jobs:
             exit 1
           fi
           APK_NAME="AoiCrypto_${{ github.event.inputs.release_tag }}.apk"
-          curl -v -o "$APK_NAME" "$BUILD_URL"
+          curl -v -L -o "$APK_NAME" "$BUILD_URL"          
           run: echo "APK_URL=$BUILD_URL"
 
       - name: Create or Update GitHub Release
