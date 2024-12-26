@@ -35,7 +35,20 @@ jobs:
             exit 1
           fi
           APK_NAME="AoiCrypto_${{ github.event.inputs.release_tag }}.apk"
-          curl -o "$APK_NAME" "$APK_URL"
+          curl -v -o "$APK_NAME" "$APK_URL"
+          
+      - name: Log APK URL
+        run: echo "APK_URL=$APK_URL"
+
+      - name: Verify Downloaded File
+        run: |
+          file "$APK_NAME"
+          cat "$APK_NAME"
+
+      - name: Validate APK
+        run: |
+          ls -lh "$APK_NAME"
+          sha256sum "$APK_NAME"
 
       - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v1
