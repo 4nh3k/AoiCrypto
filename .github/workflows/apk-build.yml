@@ -26,6 +26,10 @@ jobs:
           eas-version: latest
           token: ${{ vars.EXPO_TOKEN }}
 
+      - name: Install Dependencies
+        working-directory: ./Frontend
+        run: npm ci
+
       - name: Download build artifact
         working-directory: ./Frontend
         run: |
